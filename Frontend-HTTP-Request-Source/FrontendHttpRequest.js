@@ -41,7 +41,7 @@ class HttpRequest {
         }
 
         //Add a field to form fields of this request
-        this.formFields.push('{"fieldName":"' + fieldName + '", "fieldValue":"' + fieldValue + '"}');
+        this.formFields.push('{"fieldName":"' + this.aux_GetEscapedString(fieldName) + '", "fieldValue":"' + this.aux_GetEscapedString(fieldValue) + '"}');
     }
 
     AddFirstFileFromInputTypeFile(fieldName, inputTypeFileId) {
@@ -250,7 +250,7 @@ class HttpRequest {
             //Append to uri form data
             if (i >= 1)
                 uriFormData += "&";
-            uriFormData += field.fieldName + "=" + field.fieldValue;
+            uriFormData += this.aux_GetUnEscapedString(field.fieldName) + "=" + this.aux_GetUnEscapedString(field.fieldValue);
         }
 
         //Return the data
@@ -267,7 +267,7 @@ class HttpRequest {
             var field = JSON.parse(this.formFields[i]);
 
             //Append to formdata
-            solidFormData.append(field.fieldName, field.fieldValue);
+            solidFormData.append(this.aux_GetUnEscapedString(field.fieldName), this.aux_GetUnEscapedString(field.fieldValue));
         }
 
         //If the user has setted a file to this object, add to form data too
@@ -276,5 +276,25 @@ class HttpRequest {
 
         //Return the data
         return solidFormData;
+    }
+
+    aux_GetEscapedString(stringToEscape) {
+        //Escape the string
+        var step1 = stringToEscape.replace(/\\/g, "::backslash::").replace(/"/g, "::double_quote::").replace(/'/g, "::quote::");
+        var step2 = step1.replace(/\n/g, "::new_line::").replace(/\r/g, "::carriage_return::");
+        var step3 = step2.replace(/\t/g, "::horizontal_tab::").replace(/\v/g, "::vertical_tab::").replace(/\f/g, "::form_feed::");
+
+        //Return the escaped string
+        return step3;
+    }
+
+    aux_GetUnEscapedString(stringToUnEscape) {
+        //Unescape the string
+        var step1 = stringToUnEscape.replace(/::backslash::/g, "\\").replace(/::double_quote::/g, "\"").replace(/::quote::/g, "'");
+        var step2 = step1.replace(/::new_line::/g, "\n").replace(/::carriage_return::/g, "\r");
+        var step3 = step2.replace(/::horizontal_tab::/g, "\t").replace(/::vertical_tab::/g, "\v").replace(/::form_feed::/g, "\f");
+
+        //Return the unescaped string
+        return step3;
     }
 }
