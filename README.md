@@ -10,12 +10,12 @@ With this library you can make HTTP requests like POST, GET or File Upload in an
 
 # How to use?
 
-It's very easy to use Frontend HTTP Request! First you need to clone this repository. Open the downloaded file and go to the "Frontend-HTTP-Request-Source" folder then copy the "FrontendHttpRequest.js" file and place it somewhere on your website.
+It's very easy to use Frontend HTTP Request! First you need to clone this repository. Open the downloaded file and go to the "Frontend-HTTP-Request-Source" folder then copy the "frontend-http-request.js" file and place it somewhere on your website.
 
-The next step is to reference the library in your HTML page so that you can use the library's code within your page's Javascript code. To do this, place the HTML code below inside the `<head>` and `</head>` tags of your page. Remember to change the `src` attribute to the path where the "FrontendHttpRequest.js" file is!
+The next step is to reference the library in your HTML page so that you can use the library's code within your page's Javascript code. To do this, place the HTML code below inside the `<head>` and `</head>` tags of your page. Remember to change the `src` attribute to the path where the "frontend-http-request.js" file is!
 
 ```html
-<script type="text/javascript" src="../../folder/folder/FrontendHttpRequest.js"></script>
+<script type="text/javascript" src="../../folder/folder/frontend-http-request.js"></script>
 ```
 
 Now comes the fun part! Make HTTP requests! To start, you need to instantiate an "HttpRequest" object. When instantiating it, you must inform the type of request (POST or GET) and the INTERNAL PATH or URL to an API. Next, if you want to add Form Fields to the request, you need to use the "AddFormField()" method of the "HttpRequest" object. Then, just use the "SetOnDoneCallback()", "SetOnProgressCallback()", "SetOnSuccessCallback()" and "SetOnErrorCallback()" methods to register the codes that will be executed in each of these Callbacks. Remembering that you are not obliged to register codes in any Callback! Currently, the library has the following Callbacks supported on ANY type of Request made...
