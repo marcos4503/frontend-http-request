@@ -180,11 +180,12 @@ httpRequest.SetOnSuccessCallback(function (textResponse, jsonResponse) {
     //Get the parsed JSON response if the ResponseHeader is the expected and run OnError callback if is not the expected ResponseHeader...
     var jsonReply = httpRequest.GetParsedJsonIfApiUsingBackendResponseBuilderHaveReturnedExpectedResponseHeaderAndRunOnErrorCallbackIfNotReturned(textResponse, "success");
 
-    //If don't have a JSON object, stop here, since the OnError callback was executed...
-    if(jsonReply == null)
-        return;
+    //If there is a JSON object, it means that the API response contained the expected header and the parsed JSON object was obtained, so we continue...
+    if(jsonReply != null){
 
-    //Executes the success code, since at this point, there is a JSON object, since the ResponseHeader contained what was expected...
+        //Run on success code...
+
+    }
 });
 httpRequest.AddFormField("car", "honda");
 httpRequest.AddFormField("model", "civic");
