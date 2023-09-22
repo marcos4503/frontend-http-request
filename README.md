@@ -169,7 +169,26 @@ When using this method, you must pass as the first parameter, the plain text res
 This method will make your life easier because if the response contains the expected Response Header, you can continue processing the response normally, however, if the Response Header is not present in the API response, the "OnError" callback will be executed automatically, thus Therefore, the "OnError" callback will be executed if the request was not successful (due to no internet access, 404, 403 for example) or if the Response Header obtained does not contain the expected header. Therefore, method "GetParsedJsonIfApiUsingBackendResponseBuilderHaveReturnedExpectedResponseHeaderAndRunOnErrorCallbackIfNotReturned()" should only be used inside the code that you registered within the "OnSuccess" callback. See an example below...
 
 ```javascript
+var httpRequest = new HttpRequest("GET", "https://remoteserver.com/target-api.php");
+httpRequest.SetOnDoneCallback(function () {
+    //On done code...
+});
+httpRequest.SetOnErrorCallback(function () {
+    //On error code...
+});
+httpRequest.SetOnSuccessCallback(function (textResponse, jsonResponse) {
+    //Get the parsed JSON response if the ResponseHeader is the expected and run OnError callback if is not the expected ResponseHeader...
+    var jsonReply = httpRequest.GetParsedJsonIfApiUsingBackendResponseBuilderHaveReturnedExpectedResponseHeaderAndRunOnErrorCallbackIfNotReturned(textResponse, "success");
 
+    //If don't have a JSON object, stop here, since the OnError callback was executed...
+    if(jsonReply == null)
+        return;
+
+    //Executes the success code, since at this point, there is a JSON object, since the ResponseHeader contained what was expected...
+});
+httpRequest.AddFormField("car", "honda");
+httpRequest.AddFormField("model", "civic");
+httpRequest.StartRequest();
 ```
 
 # Support projects like this
