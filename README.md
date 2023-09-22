@@ -154,7 +154,7 @@ if (httpRequest.isRequestInProgress() == true)
 
 That is all!
 
-# Do you use the Backend Response Builder in your PHP APIs?
+# Do you use Backend Response Builder in your PHP APIs?
 
 
 
