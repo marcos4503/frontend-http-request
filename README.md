@@ -162,7 +162,15 @@ Because of these Backend Response Builder rules, the responses produced by PHP A
 
 If you intend to use Frontend Http Request to consume PHP APIs that use the Backend Response Builder, the Frontend Http Request also has a method to make your life even easier!
 
+To check whether the Response Header returned by the API contains the header that you expect, you can use the "GetParsedJsonIfApiUsingBackendResponseBuilderHaveReturnedExpectedResponseHeaderAndRunOnErrorCallbackIfNotReturned()" method. The name is a "little" big... But it's supposed to be VERY self-explanatory!
 
+When using this method, you must pass as the first parameter, the plain text response obtained from the API, and as a second parameter, a string containing the header that you expect the API response to have, to be considered valid. If the response returned by the API contains the expected header, then a JSON object created from the Response Body will be returned to you when calling this method. However, if the response returned by the API does not contain the expected header, this method will return `NULL` and will run any code registered in the "OnError" callback of your "HttpRequest" object.
+
+This method will make your life easier because if the response contains the expected Response Header, you can continue processing the response normally, however, if the Response Header is not present in the API response, the "OnError" callback will be executed automatically, thus Therefore, the "OnError" callback will be executed if the request was not successful (due to no internet access, 404, 403 for example) or if the Response Header obtained does not contain the expected header. Therefore, method "GetParsedJsonIfApiUsingBackendResponseBuilderHaveReturnedExpectedResponseHeaderAndRunOnErrorCallbackIfNotReturned()" should only be used inside the code that you registered within the "OnSuccess" callback. See an example below...
+
+```javascript
+
+```
 
 # Support projects like this
 
