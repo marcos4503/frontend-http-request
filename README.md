@@ -156,6 +156,12 @@ That is all!
 
 # Do you use Backend Response Builder in PHP APIs?
 
+Backend Response Builder is a library written for PHP that has the task of being an alternative for you who don't want (or can't) use systems like SOAP or REST, and just want to use HTTPS + PHP + GET/POST returning JSON to build your Backend APIs. This library provides a standardized, reliable, and typed way to construct your JSON responses that will be returned to Clients that consume your PHP APIs. Backend Response Builder has a set of rules to standardize the way in which JSON responses will be sent by your PHP APIs.
+
+Because of these Backend Response Builder rules, the responses produced by PHP APIs that use it are a little different. Instead of these APIs returning just a simple JSON response to clients, APIs that use the Backend Response Builder return a response divided between a Response Header and a Response Body, where the Header is a summary of the response, and the Body is the JSON content of the API response. You can see the Backend Response Builder library <a href="https://github.com/marcos4503/backend-response-builder" target="_blank">here</a> if you want to take a look and better understand how it works.
+
+If you intend to use Frontend Http Request to consume PHP APIs that use the Backend Response Builder, the Frontend Http Request also has a method to make your life even easier!
+
 
 
 # Support projects like this
