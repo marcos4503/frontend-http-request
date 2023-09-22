@@ -12,6 +12,7 @@ class HttpRequest {
     cache_xmlHttpReqObj;
 
     //Private variables
+    logsPrefix = "";
     requestType = "NONE";
     phpApiUrl = "";
     formFields = [];
@@ -36,7 +37,7 @@ class HttpRequest {
     AddFormField(fieldName, fieldValue) {
         //If this object is not in READY state, ignores the call for this method
         if (this.cache_requestStatus != 0) {
-            console.error("It is only possible to use the method while object HttpRequest is in READY state, that is, without any Request initiated!");
+            console.error(this.logsPrefix + "It is only possible to use the method while object HttpRequest is in READY state, that is, without any Request initiated!");
             return;
         }
 
@@ -47,17 +48,17 @@ class HttpRequest {
     AddFirstFileFromInputTypeFile(fieldName, inputTypeFileId) {
         //If this object is not in READY state, ignores the call for this method
         if (this.cache_requestStatus != 0) {
-            console.error("It is only possible to use the method while object HttpRequest is in READY state, that is, without any Request initiated!");
+            console.error(this.logsPrefix + "It is only possible to use the method while object HttpRequest is in READY state, that is, without any Request initiated!");
             return;
         }
         //If this object is GET, dont allow the addiction
         if (this.requestType == "GET") {
-            console.error("It is not possible to associate a File to an HttpRequest object of type GET. Use POST instead!");
+            console.error(this.logsPrefix + "It is not possible to associate a File to an HttpRequest object of type GET. Use POST instead!");
             return;
         }
         //If the input type file id is not a string, cancel this call
         if (typeof inputTypeFileId !== "string") {
-            console.error("Could not get a reference to the Input Type File. You must provide the ID of an Input Type File element!");
+            console.error(this.logsPrefix + "Could not get a reference to the Input Type File. You must provide the ID of an Input Type File element!");
             return;
         }
 
@@ -65,7 +66,7 @@ class HttpRequest {
         var inputTypeFile = document.getElementById(inputTypeFileId);
         //Validate the reference
         if (inputTypeFile == null || inputTypeFile.tagName != "INPUT") {
-            console.error("Could not get a reference to the Input Type File. You must provide the ID of an Input Type File element!");
+            console.error(this.logsPrefix + "Could not get a reference to the Input Type File. You must provide the ID of an Input Type File element!");
             return;
         }
 
@@ -78,7 +79,7 @@ class HttpRequest {
     SetOnDoneCallback(newCallback) {
         //If this object is not in READY state, ignores the call for this method
         if (this.cache_requestStatus != 0) {
-            console.error("It is only possible to use the method while object HttpRequest is in READY state, that is, without any Request initiated!");
+            console.error(this.logsPrefix + "It is only possible to use the method while object HttpRequest is in READY state, that is, without any Request initiated!");
             return;
         }
 
@@ -89,7 +90,7 @@ class HttpRequest {
     SetOnProgressCallback(newCallback) {
         //If this object is not in READY state, ignores the call for this method
         if (this.cache_requestStatus != 0) {
-            console.error("It is only possible to use the method while object HttpRequest is in READY state, that is, without any Request initiated!");
+            console.error(this.logsPrefix + "It is only possible to use the method while object HttpRequest is in READY state, that is, without any Request initiated!");
             return;
         }
 
@@ -100,7 +101,7 @@ class HttpRequest {
     SetOnSuccessCallback(newCallback) {
         //If this object is not in READY state, ignores the call for this method
         if (this.cache_requestStatus != 0) {
-            console.error("It is only possible to use the method while object HttpRequest is in READY state, that is, without any Request initiated!");
+            console.error(this.logsPrefix + "It is only possible to use the method while object HttpRequest is in READY state, that is, without any Request initiated!");
             return;
         }
 
@@ -111,7 +112,7 @@ class HttpRequest {
     SetOnErrorCallback(newCallback) {
         //If this object is not in READY state, ignores the call for this method
         if (this.cache_requestStatus != 0) {
-            console.error("It is only possible to use the method while object HttpRequest is in READY state, that is, without any Request initiated!");
+            console.error(this.logsPrefix + "It is only possible to use the method while object HttpRequest is in READY state, that is, without any Request initiated!");
             return;
         }
 
@@ -122,12 +123,12 @@ class HttpRequest {
     StartRequest() {
         //If this object is not in READY state, ignores the call for this method
         if (this.cache_requestStatus != 0) {
-            console.error("It is only possible to use the method while object HttpRequest is in READY state, that is, without any Request initiated!");
+            console.error(this.logsPrefix + "It is only possible to use the method while object HttpRequest is in READY state, that is, without any Request initiated!");
             return;
         }
         //If this object don't have a request type defined, cancel
         if (this.requestType == "NONE") {
-            console.error("It was not possible to start the Request of object HttpRequest. No type of request was defined in the object's constructor!");
+            console.error(this.logsPrefix + "It was not possible to start the Request of object HttpRequest. No type of request was defined in the object's constructor!");
             return;
         }
 
@@ -149,7 +150,7 @@ class HttpRequest {
                 //If ERROR
                 if (thisObj.cache_xmlHttpReqObj.readyState == 4 && thisObj.cache_xmlHttpReqObj.status != 200) {
                     //Inform the error to console
-                    console.log("Error on execute Http Request: " + thisObj.cache_xmlHttpReqObj.status);
+                    console.log(this.logsPrefix + "Error on execute Http Request: " + thisObj.cache_xmlHttpReqObj.status);
                     //Run the callback
                     if (typeof thisObj.onErrorCallback !== "undefined")
                         thisObj.onErrorCallback();
@@ -220,7 +221,7 @@ class HttpRequest {
     StopRequest() {
         //If this object is not in REQUESTING state, ignores the call for this method
         if (this.cache_requestStatus != 1) {
-            console.error("It is only possible to use the method while object HttpRequest is in REQUESTING state, that is, with a Request in progress!");
+            console.error(this.logsPrefix + "It is only possible to use the method while object HttpRequest is in REQUESTING state, that is, with a Request in progress!");
             return;
         }
 
@@ -233,7 +234,31 @@ class HttpRequest {
             this.cache_xmlHttpReqObj.abort();
         //Set the status as finished
         this.cache_requestStatus = 2;
-        console.log("Http Request Stopped!");
+        console.log(this.logsPrefix + "Http Request Stopped!");
+    }
+
+    //Useful methods for compatibility with Backend Response Builder
+
+    GetParsedJsonIfApiUsingBackendResponseBuilderHaveReturnedExpectedResponseHeaderAndRunOnErrorCallbackIfNotReturned(apiTextResonse, expectedHeader) {
+        //Split the API response (using Backend Response Builder) between ResponseHeader and ResponseBody
+        var splitedResponse = apiTextResonse.split(/<br\/>(.*)/).filter(part => part);
+        var responseHeader = splitedResponse[0];
+        var responseBody = splitedResponse[1];
+
+        //Check if the header includes the expected header...
+        if (responseHeader.includes(expectedHeader) == true) {
+            //Return the JSON Object parsed...
+            return JSON.parse(responseBody);
+        }
+        else {
+            //Inform the error to console
+            console.log(this.logsPrefix + "Error on read Http Request response: The Response Header obtained from the API using \"Backend Response Builder\" was \"" + responseHeader + "\", but the Response Header was expected to contain \"" + expectedHeader + "\". The callback OnError has been executed.");
+            //Run the callback
+            if (typeof this.onErrorCallback !== "undefined")
+                this.onErrorCallback();
+            //Return a NULL value...
+            return null;
+        }
     }
 
     //Auxiliar methods
@@ -297,4 +322,5 @@ class HttpRequest {
         //Return the unescaped string
         return step3;
     }
+
 }
