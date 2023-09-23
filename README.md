@@ -152,6 +152,8 @@ if (httpRequest.isRequestInProgress() == true)
     httpRequest.StopRequest();
 ```
 
+And finally, every request made with Frontend Http Request has a small standard delay of 1 second before the request is actually made. There are many reasons for this, such as making it easier to avoid the flood of requests, enabling the UI to complete animations, transitions and other features before the request, etc. However, in specific situations, it may be necessary to have a shorter delay, or a delay of 0ms to make the request. In scenarios like this, you can use the "SetRequestCustomDelay()" method of the instantiated "HttpRequest" object. In the "SetRequestCustomDelay()" method, all you need to pass is a number that corresponds to the delay before the request (in milliseconds), but the "SetRequestCustomDelay()" method must be called before the "StartRequest()" method!
+
 That is all!
 
 # Do you use Backend Response Builder in PHP APIs?

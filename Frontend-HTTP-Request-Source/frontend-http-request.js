@@ -13,6 +13,7 @@ class HttpRequest {
 
     //Private variables
     logsPrefix = "";
+    requestDelay = 1000;
     requestType = "NONE";
     phpApiUrl = "";
     formFields = [];
@@ -32,6 +33,17 @@ class HttpRequest {
         if (requestType == "GET" || requestType == "POST")
             this.requestType = requestType;
         this.phpApiUrl = phpApiUrl;
+    }
+
+    SetRequestCustomDelay(customDelay) {
+        //If this object is not in READY state, ignores the call for this method
+        if (this.cache_requestStatus != 0) {
+            console.error(this.logsPrefix + "It is only possible to use the method while object HttpRequest is in READY state, that is, without any Request initiated!");
+            return;
+        }
+
+        //Set the custom delay
+        this.requestDelay = customDelay;
     }
 
     AddFormField(fieldName, fieldValue) {
@@ -199,7 +211,7 @@ class HttpRequest {
                 thisObj.cache_xmlHttpReqObj.open("POST", thisObj.phpApiUrl, true);
                 thisObj.cache_xmlHttpReqObj.send(thisObj.aux_GetFormFieldsConvertedToPOST());
             }
-        }, 1000);
+        }, this.requestDelay);
     }
 
     isRequestInProgress() {
